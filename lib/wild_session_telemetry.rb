@@ -21,6 +21,7 @@ module WildSessionTelemetry
 
     def configure
       yield(configuration)
+      configuration.freeze!
     end
 
     def reset_configuration!
