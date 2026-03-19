@@ -4,6 +4,7 @@
 
 # Beads
 .beads/
+AGENTS.md
 
 # Ruby / Bundler
 Gemfile.lock
