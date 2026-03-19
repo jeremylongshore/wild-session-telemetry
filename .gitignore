@@ -1,0 +1,22 @@
+# Dolt database files (added by bd init)
+.dolt/
+*.db
+
+# Beads
+.beads/
+
+# Ruby / Bundler
+Gemfile.lock
+vendor/bundle/
+.bundle/
+pkg/
+*.gem
+
+# RSpec
+.rspec_status
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
