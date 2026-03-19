@@ -12,6 +12,8 @@ require_relative 'wild_session_telemetry/store/retention_manager'
 require_relative 'wild_session_telemetry/store/storage_monitor'
 require_relative 'wild_session_telemetry/privacy/filter'
 require_relative 'wild_session_telemetry/collector/event_receiver'
+require_relative 'wild_session_telemetry/export/record_builder'
+require_relative 'wild_session_telemetry/export/exporter'
 
 module WildSessionTelemetry
   class << self
