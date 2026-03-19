@@ -17,6 +17,11 @@ Metrics/BlockLength:
     - "spec/**/*"
     - "*.gemspec"
 
+RSpec/DescribeClass:
+  Exclude:
+    - "spec/integration/**/*"
+    - "spec/adversarial/**/*"
+
 RSpec/MultipleExpectations:
   Max: 5
 
