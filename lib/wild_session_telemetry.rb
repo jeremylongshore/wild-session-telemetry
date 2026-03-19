@@ -14,6 +14,7 @@ require_relative 'wild_session_telemetry/privacy/filter'
 require_relative 'wild_session_telemetry/collector/event_receiver'
 require_relative 'wild_session_telemetry/export/record_builder'
 require_relative 'wild_session_telemetry/export/exporter'
+require_relative 'wild_session_telemetry/aggregation/engine'
 
 module WildSessionTelemetry
   class << self
