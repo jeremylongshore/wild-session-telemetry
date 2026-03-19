@@ -22,6 +22,8 @@
 | 008 | DR-REFF | Configuration Reference | Every configurable parameter, constant, and constructor argument |
 | 009 | OD-OPNS | Operator Deployment Guide | Prerequisites, installation, configuration, production setup |
 | 010 | OD-GUID | Operator Workflow Guide | Health checks, queries, exports, aggregations, patterns, retention, troubleshooting |
+| 011 | PP-PLAN | v2 Expansion Roadmap | Extension points, v2 candidates, cross-repo integration points |
+| 012 | PP-PLAN | Confirmed Out of Scope | Non-goals reconfirmed after v1 implementation |
 
 ---
 
