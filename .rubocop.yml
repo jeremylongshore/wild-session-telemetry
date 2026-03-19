@@ -39,6 +39,11 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Max: 20
 
+Metrics/ParameterLists:
+  MaxOptionalParameters: 5
+  Exclude:
+    - "lib/wild_session_telemetry/schema/event_envelope.rb"
+
 Metrics/CyclomaticComplexity:
   Max: 8
 

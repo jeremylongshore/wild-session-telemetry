@@ -12,10 +12,9 @@ module WildSessionTelemetry
       }.freeze
 
       def filter(event)
-        h = normalize(event)
-        h = strip_top_level(h)
-        h = filter_metadata(h)
-        h
+        normalized = normalize(event)
+        stripped = strip_top_level(normalized)
+        filter_metadata(stripped)
       end
 
       private
@@ -24,18 +23,18 @@ module WildSessionTelemetry
         event.transform_keys(&:to_sym)
       end
 
-      def strip_top_level(h)
-        h.select { |key, _| ALLOWED_TOP_LEVEL_KEYS.include?(key) }
+      def strip_top_level(event_hash)
+        event_hash.slice(*ALLOWED_TOP_LEVEL_KEYS)
       end
 
-      def filter_metadata(h)
-        metadata = h[:metadata]
-        return h if metadata.nil? || !metadata.is_a?(Hash)
+      def filter_metadata(event_hash)
+        metadata = event_hash[:metadata]
+        return event_hash if metadata.nil? || !metadata.is_a?(Hash)
 
-        event_type = h[:event_type].to_s
+        event_type = event_hash[:event_type].to_s
         allowed_keys = METADATA_ALLOWLISTS.fetch(event_type, [])
-        filtered = metadata.transform_keys(&:to_s).select { |key, _| allowed_keys.include?(key) }
-        h.merge(metadata: filtered.transform_keys(&:to_sym))
+        filtered = metadata.transform_keys(&:to_s).slice(*allowed_keys)
+        event_hash.merge(metadata: filtered.transform_keys(&:to_sym))
       end
     end
   end

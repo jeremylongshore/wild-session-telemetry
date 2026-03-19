@@ -6,7 +6,7 @@ module WildSessionTelemetry
       VALID_EVENT_TYPES = %w[action.completed gate.evaluated rate_limit.checked].freeze
       VALID_OUTCOMES = %w[success denied error preview rate_limited].freeze
       REQUIRED_FIELDS = %i[event_type timestamp caller_id action outcome].freeze
-      ISO8601_PATTERN = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.freeze
+      ISO8601_PATTERN = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/
 
       def validate(event)
         errors = []
@@ -30,9 +30,9 @@ module WildSessionTelemetry
         {}
       end
 
-      def validate_required_fields(h, errors)
+      def validate_required_fields(event_hash, errors)
         REQUIRED_FIELDS.each do |field|
-          value = h[field]
+          value = event_hash[field]
           errors << "#{field} is required" if value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
       end
