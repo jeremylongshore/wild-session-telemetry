@@ -19,6 +19,9 @@
 | 005 | TQ-STND | Safety Model | 8 enforceable safety rules governing privacy, storage, and operational behavior |
 | 006 | AT-ADEC | Threat Model | 8 threats with mitigations covering the telemetry data lifecycle |
 | 007 | AT-ADEC | Architecture Decisions | 7 key design decisions with rationale and trade-off analysis |
+| 008 | DR-REFF | Configuration Reference | Every configurable parameter, constant, and constructor argument |
+| 009 | OD-OPNS | Operator Deployment Guide | Prerequisites, installation, configuration, production setup |
+| 010 | OD-GUID | Operator Workflow Guide | Health checks, queries, exports, aggregations, patterns, retention, troubleshooting |
 
 ---
 
@@ -30,3 +33,6 @@
 | TQ-STND | Technical quality standard — enforceable specs and models |
 | AT-STND | Architecture standard — data contracts, interface definitions |
 | AT-ADEC | Architecture decision — design choices, threat analysis |
+| DR-REFF | Developer reference — parameter and API reference documentation |
+| OD-OPNS | Operator documentation — deployment and operational setup |
+| OD-GUID | Operator documentation — workflow and usage guides |

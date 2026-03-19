@@ -10,7 +10,7 @@ This file provides guidance to Claude Code when working in this repository.
 - **Mission:** Collect and export privacy-aware telemetry from agent sessions
 - **Namespace:** `WildSessionTelemetry`
 - **Language:** Ruby 3.2+, pure library gem (no MCP, no ActiveRecord)
-- **Status:** Phase 0 complete, Epic 1 in progress
+- **Status:** v1 complete — all 10 epics implemented, 325 tests passing
 
 ## What This Repo Does
 
@@ -30,17 +30,18 @@ Provides a privacy-aware telemetry library that receives structured events from 
 ## Directory Layout
 
 ```
-lib/                    # Source code (Ruby convention)
-  wild_session_telemetry/
-    ingestion/          # Event reception, validation, field stripping
-    store/              # Pluggable storage backends (MemoryStore, JsonLinesStore)
-    aggregation/        # Time-windowed rollups and summaries
-    export/             # Aggregated output for downstream consumers
-spec/                   # Tests (RSpec)
-config/                 # Configuration files (event schema, store defaults)
-000-docs/               # Canonical docs per /doc-filing
-planning/               # Active planning artifacts
-notes/                  # Scratch notes and working context
+lib/wild_session_telemetry/
+  collector/            # EventReceiver — fire-and-forget ingestion
+  privacy/              # Privacy::Filter — forbidden fields + metadata allowlisting
+  schema/               # EventEnvelope + Validator
+  store/                # MemoryStore, JsonLinesStore, RetentionManager, StorageMonitor
+  aggregation/          # Engine (summaries, utilization, distributions, latency) + PatternDetector
+  export/               # RecordBuilder + Exporter (JSON Lines output)
+spec/
+  wild_session_telemetry/  # Unit tests per module
+  integration/             # Full pipeline integration tests
+  adversarial/             # Privacy invariants, safety rules, threat mitigations
+000-docs/               # Canonical docs per /doc-filing (12 documents)
 ```
 
 ## Build Commands
@@ -70,11 +71,14 @@ These are non-negotiable when working in this repo:
 |-----|---------|
 | `000-docs/001-PP-PLAN-repo-blueprint.md` | Mission, boundaries, architecture direction |
 | `000-docs/002-PP-PLAN-epic-build-plan.md` | 10-epic build plan with sequencing and dependencies |
-| `000-docs/003-TQ-STND-privacy-model.md` | Privacy specification — what is collected, what is excluded, enforcement rules |
-| `000-docs/004-TQ-STND-event-schema.md` | Event envelope, per-type metadata schemas, validation rules |
-| `000-docs/005-AT-ADEC-storage-architecture.md` | Store layer design, bounding strategy, pluggable backends |
-| `000-docs/006-AT-ADEC-aggregation-export.md` | Aggregation windows, export format, downstream contract |
-| `000-docs/007-AT-ADEC-integration-pattern.md` | Subscriber interface, hook wiring, failure isolation |
+| `000-docs/003-TQ-STND-privacy-model.md` | Privacy specification — what is collected, what is excluded |
+| `000-docs/004-AT-STND-data-contracts.md` | Input/output contracts, export schema, versioning |
+| `000-docs/005-TQ-STND-safety-model.md` | 8 enforceable safety rules |
+| `000-docs/006-AT-ADEC-threat-model.md` | 8 threats with mitigations |
+| `000-docs/007-AT-ADEC-architecture-decisions.md` | 7 key design decisions with rationale |
+| `000-docs/008-DR-REFF-configuration-reference.md` | Every parameter, type, default, range |
+| `000-docs/009-OD-OPNS-operator-deployment-guide.md` | Setup, configure, attach, verify |
+| `000-docs/010-OD-GUID-operator-workflow-guide.md` | Health checks, querying, exports, retention |
 
 ## Task Tracking
 
