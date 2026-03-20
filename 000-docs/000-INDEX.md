@@ -4,7 +4,7 @@
 **Filed as:** `000-INDEX.md`
 **Repo:** `wild-session-telemetry`
 **Status:** Active
-**Last updated:** 2026-03-19
+**Last updated:** 2026-03-20
 
 ---
 
@@ -24,6 +24,7 @@
 | 010 | OD-GUID | Operator Workflow Guide | Health checks, queries, exports, aggregations, patterns, retention, troubleshooting |
 | 011 | PP-PLAN | v2 Expansion Roadmap | Extension points, v2 candidates, cross-repo integration points |
 | 012 | PP-PLAN | Confirmed Out of Scope | Non-goals reconfirmed after v1 implementation |
+| 013 | RL-REPT | Release v0.1.0 Report | Release audit trail, metrics, and post-release checklist |
 
 ---
 
@@ -38,3 +39,4 @@
 | DR-REFF | Developer reference — parameter and API reference documentation |
 | OD-OPNS | Operator documentation — deployment and operational setup |
 | OD-GUID | Operator documentation — workflow and usage guides |
+| RL-REPT | Release report — audit trail, metrics, post-release documentation |
