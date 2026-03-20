@@ -89,10 +89,21 @@ RSpec.describe WildSessionTelemetry::Store::RetentionManager do
 
     context 'with a very short retention window (1 day)' do
       let(:manager) { described_class.new(store: store, retention_days: 1) }
+      # Use a dynamic timestamp to ensure freshness regardless of test run time
+      let(:fresh_envelope) do
+        WildSessionTelemetry::Schema::EventEnvelope.new(
+          event_type: 'action.completed',
+          timestamp: Time.now.utc.iso8601(3),
+          caller_id: 'test',
+          action: 'fresh_action',
+          outcome: 'success',
+          received_at: Time.now.utc.iso8601(3)
+        )
+      end
 
       before do
         store.append(old_envelope)
-        store.append(new_envelope)
+        store.append(fresh_envelope)
       end
 
       it 'removes events older than one day' do
