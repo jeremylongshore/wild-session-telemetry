@@ -2,7 +2,7 @@
 
 Privacy-aware telemetry collection and export from agent sessions.
 
-Part of the **wild** ecosystem — Wave 2 observability pipeline. Receives structured events from operational repos (`wild-admin-tools-mcp`, `wild-rails-safe-introspection-mcp`) and produces aggregated, privacy-safe usage data for downstream analysis by `wild-gap-miner` and `wild-transcript-pipeline`.
+Part of the **[wild ecosystem](https://github.com/jeremylongshore/wild-rails-ai-ops)** — 10 Ruby gems for running AI agents inside Rails apps under capability control. Receives structured events from operational repos (`wild-admin-tools-mcp`, `wild-rails-safe-introspection-mcp`) and produces aggregated, privacy-safe usage data for downstream analysis by `wild-gap-miner` and `wild-transcript-pipeline`.
 
 ![Status](https://img.shields.io/badge/status-v1_complete-brightgreen)
 ![Ruby](https://img.shields.io/badge/ruby-3.2%2B-red)
