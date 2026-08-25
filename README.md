@@ -8,6 +8,8 @@ Part of the **[wild ecosystem](https://github.com/intent-solutions-io/wild-rails
 ![Ruby](https://img.shields.io/badge/ruby-3.2%2B-red)
 ![License](https://img.shields.io/badge/license-proprietary-blue)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U5S225PTME)
+
 ## Quick Start
 
 Add to your Gemfile:
