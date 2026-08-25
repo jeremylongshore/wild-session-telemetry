@@ -15,22 +15,29 @@ name: 'MiniMax Code Review'
 # blocks a merge. The deterministic gate stays the CI workflow (rspec on Ruby
 # 3.2 and 3.3, plus rubocop at zero offenses). REVIEW.md at the repo root is the
 # reviewer law; both system prompts below are distillations of it for a
-# diff-scoped reviewer. The action fetches the PR diff through the API and never
-# checks out or executes pull request code.
+# diff-scoped reviewer. This workflow has no `actions/checkout` step, and the
+# action reads the diff through the pulls.listFiles API rather than a working
+# copy, so pull request code is never checked out or executed here.
 #
 # The action is our maintained fork (jeremylongshore/minimax-code-review),
-# SHA-pinned per supply-chain policy: it adds per-reviewer sticky comments
-# (upstream's fixed marker makes two lanes clobber each other), reasoning-model
-# <think>-stripping (M3), and the opt-in PR-description context the adversarial
-# lane requires.
+# SHA-pinned per supply-chain policy. Read at the pinned SHA below, it adds
+# per-reviewer sticky comment markers (src/index.js:15-27; upstream's fixed
+# marker makes two lanes clobber each other), reasoning-model <think>-stripping
+# for M3 (src/index.js:175-192), and the opt-in PR-description context the
+# adversarial lane requires (action.yml:27-28). The API-only diff read is
+# src/index.js:54.
 #
 # SAFE-FOR-FORKS design: runs on `pull_request` (NOT pull_request_target), so a
 # forked PR never receives the MINIMAX_API_KEY secret. The same-repo guard below
 # skips fork PRs cleanly instead of failing on an empty key.
 #
-# Activation: already done on this repo. Secret MINIMAX_API_KEY, variable
-# ENABLE_MINIMAX_REVIEW=true, and variable MINIMAX_MODEL are ALREADY SET here,
-# so these lanes are live on the next pull request.
+# Activation: secret MINIMAX_API_KEY and variables ENABLE_MINIMAX_REVIEW=true
+# and MINIMAX_MODEL are set on this repository. That is repository
+# configuration, not something a diff can show, so verify it with
+# `gh api repos/OWNER/REPO/actions/variables` and `.../actions/secrets` rather
+# than taking this comment's word for it. Both lanes ran and posted on pull
+# request #16, which is the evidence that the wiring works; on any other pull
+# request, expect the same only while those settings hold.
 #   Kill switch:  set ENABLE_MINIMAX_REVIEW to anything but 'true' (both lanes).
 #   Optional:     ENABLE_MINIMAX_ADVERSARIAL=false (drop the claims lane only),
 #                 MINIMAX_MAX_DIFF_CHARS (default 100000),
