@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Store::RetentionManager` accepts an optional `clock:` callable (default: the wall clock) used to
+  compute the retention cutoff, so the cutoff can be pinned in tests.
+
+### Fixed
+
+- Retention specs no longer expire with the calendar. Their fixtures use fixed dates, and the "recent"
+  event (2026-03-19) aged out of the 90-day window on 2026-06-17, after which six examples failed on
+  `main` although the purge logic was correct. The specs now pin the clock, and a boundary case asserts
+  that only events strictly older than the cutoff are purged.
+
 ## [0.1.0] — 2026-03-19
 
 ### Added

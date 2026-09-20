@@ -8,16 +8,20 @@ module WildSessionTelemetry
     class RetentionManager
       attr_reader :retention_days, :max_size_bytes
 
-      def initialize(store:, retention_days: 90, max_size_bytes: nil)
+      # `clock` is any callable returning the current Time. It exists so the
+      # retention cutoff can be pinned in tests: a cutoff computed from the wall
+      # clock makes every fixed-date fixture expire eventually.
+      def initialize(store:, retention_days: 90, max_size_bytes: nil, clock: -> { Time.now })
         @store = store
         @retention_days = retention_days
         @max_size_bytes = max_size_bytes
+        @clock = clock
       end
 
       def purge_expired
         return 0 unless @store.is_a?(JsonLinesStore) && File.exist?(@store.path)
 
-        cutoff = (Time.now.utc - (@retention_days * 86_400)).iso8601(3)
+        cutoff = (@clock.call.utc - (@retention_days * 86_400)).iso8601(3)
         purge_before(cutoff)
       end
 
