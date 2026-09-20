@@ -9,7 +9,13 @@ RSpec.describe WildSessionTelemetry::Store::RetentionManager do
   let(:store_path) { File.join(tmpdir, 'events.jsonl') }
   let(:store) { WildSessionTelemetry::Store::JsonLinesStore.new(path: store_path) }
 
-  # old_envelope has a received_at that is ~108 days before 2026-03-19,
+  # The clock is pinned one day after new_envelope. These fixtures use fixed
+  # dates, so a manager reading the wall clock would eventually treat
+  # new_envelope as expired too (it did, from 2026-06-17 on).
+  let(:now) { Time.utc(2026, 3, 20) }
+  let(:clock) { -> { now } }
+
+  # old_envelope has a received_at that is ~109 days before `now`,
   # well outside a 90-day retention window.
   let(:old_envelope) do
     WildSessionTelemetry::Schema::EventEnvelope.new(
@@ -37,7 +43,7 @@ RSpec.describe WildSessionTelemetry::Store::RetentionManager do
 
   describe '#purge_expired' do
     context 'with a retention window of 90 days' do
-      let(:manager) { described_class.new(store: store, retention_days: 90) }
+      let(:manager) { described_class.new(store: store, retention_days: 90, clock: clock) }
 
       before do
         store.append(old_envelope)
@@ -61,12 +67,47 @@ RSpec.describe WildSessionTelemetry::Store::RetentionManager do
     end
 
     context 'when all events are within the retention window' do
-      let(:manager) { described_class.new(store: store, retention_days: 90) }
+      let(:manager) { described_class.new(store: store, retention_days: 90, clock: clock) }
 
       before { store.append(new_envelope) }
 
       it 'returns 0' do
         expect(manager.purge_expired).to eq(0)
+      end
+    end
+
+    context 'when events sit exactly on the retention boundary' do
+      let(:manager) { described_class.new(store: store, retention_days: 90, clock: clock) }
+      let(:cutoff) { now - (90 * 86_400) }
+
+      def envelope_received_at(time, action)
+        WildSessionTelemetry::Schema::EventEnvelope.new(
+          event_type: 'action.completed',
+          timestamp: time.iso8601(3),
+          caller_id: 'test',
+          action: action,
+          outcome: 'success',
+          received_at: time.iso8601(3)
+        )
+      end
+
+      before do
+        store.append(envelope_received_at(cutoff - 0.001, 'one_ms_too_old'))
+        store.append(envelope_received_at(cutoff, 'exactly_at_cutoff'))
+        store.append(envelope_received_at(cutoff + 0.001, 'one_ms_inside'))
+      end
+
+      it 'purges only events strictly older than the cutoff' do
+        expect(manager.purge_expired).to eq(1)
+        expect(store.recent.map(&:action)).to contain_exactly('exactly_at_cutoff', 'one_ms_inside')
+      end
+    end
+
+    context 'with the default clock' do
+      it 'reads the wall clock, so production behavior is unchanged' do
+        manager = described_class.new(store: store, retention_days: 90)
+        store.append(old_envelope)
+        expect(manager.purge_expired).to eq(1)
       end
     end
 
@@ -80,7 +121,7 @@ RSpec.describe WildSessionTelemetry::Store::RetentionManager do
     end
 
     context 'when the file does not exist' do
-      let(:manager) { described_class.new(store: store, retention_days: 90) }
+      let(:manager) { described_class.new(store: store, retention_days: 90, clock: clock) }
 
       it 'returns 0' do
         expect(manager.purge_expired).to eq(0)
@@ -170,7 +211,7 @@ RSpec.describe WildSessionTelemetry::Store::RetentionManager do
 
   describe '#purge_all' do
     context 'with both expired and oversized conditions' do
-      let(:manager) { described_class.new(store: store, retention_days: 90, max_size_bytes: nil) }
+      let(:manager) { described_class.new(store: store, retention_days: 90, max_size_bytes: nil, clock: clock) }
 
       before do
         store.append(old_envelope)
