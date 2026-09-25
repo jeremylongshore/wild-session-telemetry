@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Ruby gems: bumps Gemfile.lock so RuboCop and friends move by reviewed PR,
+  # never by a fresh resolve on main.
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5

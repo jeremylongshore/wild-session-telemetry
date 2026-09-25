@@ -58,8 +58,8 @@ concurrency:
   cancel-in-progress: true
 
 # Runtime artifacts and local task state are excluded so review tokens go to
-# human-authored change only. Gemfile.lock is gitignored here by design (this is
-# a library gem) but is listed so an accidental commit does not eat the budget.
+# human-authored change only. Gemfile.lock is committed for CI reproducibility
+# but is generated, so it is excluded so it does not eat the budget.
 env:
   EXCLUDES: 'Gemfile.lock,*.gem,pkg/**,vendor/bundle/**,.beads/**,tmp/**,**/*.jsonl,.rspec_status'
 

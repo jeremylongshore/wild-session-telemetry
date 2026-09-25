@@ -7,7 +7,6 @@
 AGENTS.md
 
 # Ruby / Bundler
-Gemfile.lock
 vendor/bundle/
 .bundle/
 pkg/
